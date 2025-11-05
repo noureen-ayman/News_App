@@ -1,0 +1,69 @@
+import 'package:flutter/material.dart';
+import 'package:news/AppCore/extentions/context_extentions.dart';
+import 'package:provider/provider.dart';
+import '../../AppCore/providers/ThemeProvider.dart';
+
+class CustomScaffold extends StatelessWidget {
+  const CustomScaffold(
+    this.onHomeClick, {
+    super.key,
+    this.title,
+    required this.body,
+  });
+
+  final String? title;
+
+  final Widget body;
+  final VoidCallback onHomeClick;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title!),
+        centerTitle: true,
+        actions: [Icon(Icons.search_outlined)],
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            DrawerHeader(
+              child: Center(
+                child: Text("News App", style: context.fonts.titleLarge),
+              ),
+            ),
+            ListTile(
+              onTap: () {
+                onHomeClick();
+                Navigator.pop(context);
+              },
+              title: Text("Go To Home"),
+              leading: Icon(Icons.home_outlined),
+            ),
+            Divider(),
+            ListTile(
+              onTap: () {
+                themeProvider.setTheme = themeProvider.isDark
+                    ? ThemeMode.light
+                    : ThemeMode.dark;
+              },
+              title: Text(themeProvider.isDark ? "Dark" : "Light"),
+              leading: Icon(
+                themeProvider.isDark ? Icons.dark_mode : Icons.light_mode,
+              ),
+            ),
+            Divider(),
+            ListTile(
+              onTap: () {},
+              title: Text("Language"),
+              leading: Icon(Icons.language_outlined),
+            ),
+          ],
+        ),
+      ),
+      body: body,
+    );
+  }
+}
