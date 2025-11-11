@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news/AppCore/extentions/context_extentions.dart';
 import 'package:provider/provider.dart';
+
 import '../../AppCore/providers/ThemeProvider.dart';
 
 class CustomScaffold extends StatelessWidget {
@@ -8,12 +9,14 @@ class CustomScaffold extends StatelessWidget {
     this.onHomeClick, {
     super.key,
     this.title,
+    this.actions,
     required this.body,
   });
 
   final String? title;
 
   final Widget body;
+  final Widget? actions;
   final VoidCallback onHomeClick;
 
   @override
@@ -22,9 +25,11 @@ class CustomScaffold extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         title: Text(title!),
         centerTitle: true,
-        actions: [Icon(Icons.search_outlined)],
+        actions: actions != null ? [actions!] : null,
       ),
       drawer: Drawer(
         child: Column(

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:news/data/CategoryCardModel/CategoryCardModel.dart';
+
+import '../../AppCore/AppRoutes/AppRoutes.dart';
 import '../CategoryScreen/CategoryScreen.dart';
 import '../NewsScreen/NewsScreen.dart';
-import '../common/CustomScaffold.dart';
+import '../commonWidgets/CustomScaffold.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +20,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       onHomeClick,
+      actions: category == null
+          ? null
+          : IconButton(
+        onPressed: () {
+          Navigator.pushReplacementNamed(context, AppRoutes.searchRoute);
+        },
+        icon: Icon(Icons.search_outlined, size: 30,),
+      ),
       title: category == null ? 'Home' : category?.catName ?? " ",
       body: category == null
           ? CategoryScreen(onCategoryClick)

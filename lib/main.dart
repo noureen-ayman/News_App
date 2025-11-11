@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+
 import 'AppCore/AppRoutes/AppRoutes.dart';
 import 'AppCore/AppTheme/AppTheme.dart';
 import 'AppCore/providers/ThemeProvider.dart';
 import 'Presentation/HomeScreen/HomeScreen.dart';
+import 'Presentation/SearchScreen/SearchView.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/.env");
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
@@ -27,7 +32,10 @@ class NewsApp extends StatelessWidget {
       themeMode: themeProvider.themeMode,
       debugShowCheckedModeBanner: false,
 
-      routes: {AppRoutes.homeRoute: (_) => HomeScreen()},
+      routes: {
+        AppRoutes.homeRoute: (_) => HomeScreen(),
+        AppRoutes.searchRoute: (_) => SearchView()
+      },
       initialRoute: AppRoutes.homeRoute,
     );
   }
