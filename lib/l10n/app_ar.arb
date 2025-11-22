@@ -1,0 +1,18 @@
+{
+    "@@locale": "ar",
+    "viewFullArticle": "عرض المقال كاملاً",
+    "viewAll": "عرض الكل",
+    "newsApp": "تطبيق الأخبار",
+    "home": "الرئيسية",
+    "goToHome": "اذهب الى الصفحه الرئيسيه",
+    "dark": "داكن",
+    "light": "فاتح",
+    "language": "اللغة",
+    "arabic": "العربية",
+    "english": "الإنجليزية",
+    "goodMorningHereIsSomeNewsForYou": "صباح الخير إليك بعض الأخبار لك ",
+    "couldNotOpenArticleUrlMissing": "لا يمكن فتح المقال، الرابط غير موجود.",
+    "couldNotLaunchUrl": "لا يمكن فتح الرابط",
+    "somethingWentWrong": "حدث خطأ ما",
+    "noDescription": "لا يوجد وصف"
+}

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:news/AppCore/extentions/context_extentions.dart';
+import 'package:news/AppCore/extensions/context_extensions.dart';
 import 'package:provider/provider.dart';
 
+import '../../AppCore/providers/LanguageProvider.dart';
 import '../../AppCore/providers/ThemeProvider.dart';
+import '../../l10n/app_localizations.dart';
 
 class CustomScaffold extends StatelessWidget {
   const CustomScaffold(
@@ -22,6 +24,8 @@ class CustomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +40,7 @@ class CustomScaffold extends StatelessWidget {
           children: [
             DrawerHeader(
               child: Center(
-                child: Text("News App", style: context.fonts.titleLarge),
+                child: Text(l10n.newsApp, style: context.fonts.titleLarge),
               ),
             ),
             ListTile(
@@ -44,25 +48,36 @@ class CustomScaffold extends StatelessWidget {
                 onHomeClick();
                 Navigator.pop(context);
               },
-              title: Text("Go To Home"),
+              title: Text(l10n.goToHome),
               leading: Icon(Icons.home_outlined),
             ),
             Divider(),
             ListTile(
               onTap: () {
-                themeProvider.setTheme = themeProvider.isDark
+                ThemeMode newMode = themeProvider.isDark
                     ? ThemeMode.light
                     : ThemeMode.dark;
+                themeProvider.changeTheme(newMode);
               },
-              title: Text(themeProvider.isDark ? "Dark" : "Light"),
+              title: Text(themeProvider.isDark ? l10n.dark : l10n.light),
               leading: Icon(
                 themeProvider.isDark ? Icons.dark_mode : Icons.light_mode,
               ),
             ),
             Divider(),
             ListTile(
-              onTap: () {},
-              title: Text("Language"),
+              onTap: () {
+                Locale newLocale =
+                    languageProvider.getSelectedLocale().languageCode == 'ar'
+                    ? const Locale('en')
+                    : const Locale('ar');
+                languageProvider.changeLocale(newLocale);
+              },
+              title: Text(
+                languageProvider.getSelectedLocale().languageCode == 'ar'
+                    ? l10n.arabic
+                    : l10n.english,
+              ),
               leading: Icon(Icons.language_outlined),
             ),
           ],

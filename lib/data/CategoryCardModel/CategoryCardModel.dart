@@ -2,45 +2,58 @@ import '../../AppCore/AppImages/AppImages.dart';
 
 class CategoryModel {
   final String? image;
-  final String? catName;
+  final String? catNameEn;
+  final String? catNameAr;
   final String? id;
 
-  CategoryModel({required this.image, required this.catName, required this.id});
+  CategoryModel({
+    required this.image,
+    required this.catNameEn,
+    required this.catNameAr,
+    required this.id,
+  });
 
   static List<CategoryModel> categories = [
     CategoryModel(
       image: AppImages.generalImage,
-      catName: 'General',
+      catNameEn: 'General',
+      catNameAr: 'عام',
       id: 'general',
     ),
     CategoryModel(
       image: AppImages.businessImage,
-      catName: 'Business',
+      catNameEn: 'Business',
+      catNameAr: 'أعمال',
       id: 'business',
     ),
     CategoryModel(
       image: AppImages.entertainmentImage,
-      catName: 'Entertainment',
+      catNameEn: 'Entertainment',
+      catNameAr: 'ترفيه',
       id: 'entertainment',
     ),
     CategoryModel(
       image: AppImages.healthImage,
-      catName: 'Health',
+      catNameEn: 'Health',
+      catNameAr: 'صحه',
       id: 'health',
     ),
     CategoryModel(
       image: AppImages.scienceImage,
-      catName: 'Science',
+      catNameEn: 'Science',
+      catNameAr: 'علوم',
       id: 'science',
     ),
     CategoryModel(
       image: AppImages.technologyImage,
-      catName: 'Technology',
+      catNameEn: 'Technology',
+      catNameAr: 'تكنولوجيا',
       id: 'technology',
     ),
     CategoryModel(
       image: AppImages.sportsImage,
-      catName: 'Sports',
+      catNameEn: 'Sports',
+      catNameAr: 'رياضة',
       id: 'sports',
     ),
   ];

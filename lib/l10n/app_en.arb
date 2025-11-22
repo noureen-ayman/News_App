@@ -1,0 +1,18 @@
+{
+     "@@locale": "en",
+     "viewFullArticle": "View Full Article",
+     "viewAll": "View All",
+     "newsApp": "News App",
+     "home": "Home",
+     "goToHome": "Go To Home",
+     "dark": "Dark",
+     "light": "Light",
+     "language": "Language",
+     "arabic": "Arabic",
+     "english": "English",
+     "goodMorningHereIsSomeNewsForYou": "Good Morning\nHere is Some News For You",
+     "couldNotOpenArticleUrlMissing": "Could not open article, URL is missing.",
+     "couldNotLaunchUrl": "Could not launch URL",
+     "somethingWentWrong": "Something Went Wrong",
+     "noDescription": "No Description"
+ }

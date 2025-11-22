@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:news/data/CategoryCardModel/CategoryCardModel.dart';
 
 import '../../AppCore/AppRoutes/AppRoutes.dart';
+import '../../l10n/app_localizations.dart';
 import '../CategoryScreen/CategoryScreen.dart';
 import '../NewsScreen/NewsScreen.dart';
 import '../commonWidgets/CustomScaffold.dart';
@@ -18,6 +19,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations
+        .localeOf(context)
+        .languageCode;
+    final categoryName =
+        (languageCode == 'ar' ? category?.catNameAr : category?.catNameEn) ??
+            "";
+
     return CustomScaffold(
       onHomeClick,
       actions: category == null
@@ -28,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         icon: Icon(Icons.search_outlined, size: 30,),
       ),
-      title: category == null ? 'Home' : category?.catName ?? " ",
+      title: category == null ? l10n.home : categoryName,
       body: category == null
           ? CategoryScreen(onCategoryClick)
           : NewsScreen(category: category),

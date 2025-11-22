@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:news/AppCore/AppColors/AppColors.dart';
-import 'package:news/AppCore/extentions/context_extentions.dart';
+import 'package:news/AppCore/extensions/context_extensions.dart';
 import 'package:provider/provider.dart';
+
 import '../../AppCore/providers/ThemeProvider.dart';
 import '../../data/CategoryCardModel/CategoryCardModel.dart';
+import '../../l10n/app_localizations.dart';
 
 class CategoryCard extends StatelessWidget {
   final CategoryModel category;
@@ -14,6 +16,16 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations
+        .localeOf(context)
+        .languageCode;
+    final categoryName =
+        (languageCode == 'ar' ? category.catNameAr : category.catNameEn) ?? "";
+
+    final TextDirection currentDirection = Directionality.of(context);
+    final bool isRtl = currentDirection == TextDirection.rtl;
+
     final isEven = index.isEven;
     final isDark = themeProvider.isDark;
 
@@ -32,10 +44,14 @@ class CategoryCard extends StatelessWidget {
 
     Widget imageWidget = ClipRRect(
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(isEven ? 24 : 0),
-        bottomLeft: Radius.circular(isEven ? 24 : 0),
-        topRight: Radius.circular(isEven ? 0 : 24),
-        bottomRight: Radius.circular(isEven ? 0 : 24),
+        topLeft: Radius.circular(isRtl ? (isEven ? 24 : 0) : (isEven ? 24 : 0)),
+        bottomLeft: Radius.circular(
+            isRtl ? (isEven ? 24 : 0) : (isEven ? 24 : 0)),
+
+        topRight: Radius.circular(
+            isRtl ? (isEven ? 0 : 24) : (isEven ? 0 : 24)),
+        bottomRight: Radius.circular(
+            isRtl ? (isEven ? 0 : 24) : (isEven ? 0 : 24)),
       ),
       child: Image.asset(category.image ?? "", height: 200, fit: BoxFit.cover),
     );
@@ -45,7 +61,9 @@ class CategoryCard extends StatelessWidget {
           ? [
               const SizedBox(width: 8),
               Text(
-                "View All",
+                l10n.viewAll,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: context.fonts.titleLarge?.copyWith(
                   color: buttonTextColor,
                 ),
@@ -63,7 +81,9 @@ class CategoryCard extends StatelessWidget {
                 child: Icon(icon, color: buttonTextColor),
               ),
               Text(
-                "View All",
+                l10n.viewAll,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: context.fonts.titleLarge?.copyWith(
                   color: buttonTextColor,
                 ),
@@ -78,6 +98,7 @@ class CategoryCard extends StatelessWidget {
           color: buttonBgColor,
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: rowChildren,
         ),
@@ -89,7 +110,7 @@ class CategoryCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
-            category.catName ?? "",
+            categoryName,
             style: context.fonts.titleLarge?.copyWith(
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -112,7 +133,7 @@ class CategoryCard extends StatelessWidget {
 
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: isEven
+        children: (isEven ^ isRtl)
             ? [imageWidget, infoWidget]
             : [infoWidget, imageWidget],
       ),

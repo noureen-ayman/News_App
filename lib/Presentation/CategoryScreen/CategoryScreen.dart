@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:news/AppCore/extentions/context_extentions.dart';
+import 'package:news/AppCore/extensions/context_extensions.dart';
+
 import '../../data/CategoryCardModel/CategoryCardModel.dart';
+import '../../l10n/app_localizations.dart';
 import 'CategoryCardView.dart';
 
 typedef OnCategoryClick = void Function(CategoryModel category);
@@ -12,6 +14,8 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -19,7 +23,7 @@ class CategoryScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(15),
             child: Text(
-              "Good Morning\nHere is Some News For You",
+              l10n.goodMorningHereIsSomeNewsForYou,
               style: context.fonts.titleLarge,
             ),
           ),

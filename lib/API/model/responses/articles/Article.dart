@@ -1,14 +1,5 @@
 import '../sources/Source.dart';
 
-/// source : {"id":"bbc-news","name":"BBC News"}
-/// author : null
-/// title : "01/11/2025 13:01 GMT"
-/// description : "The latest five minute news bulletin from BBC World Service."
-/// url : "https://www.bbc.co.uk/programmes/w172zwwybwvqyj7"
-/// urlToImage : "https://ichef.bbci.co.uk/images/ic/1200x675/p060dh18.jpg"
-/// publishedAt : "2025-11-01T13:06:00Z"
-/// content : "The latest five minute news bulletin from BBC World Service."
-
 class Article {
   Article({
     this.source,
