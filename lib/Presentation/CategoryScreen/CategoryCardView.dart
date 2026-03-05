@@ -10,133 +10,173 @@ import '../../l10n/app_localizations.dart';
 class CategoryCard extends StatelessWidget {
   final CategoryModel category;
   final int index;
+  final VoidCallback? onTap;
 
-  const CategoryCard({super.key, required this.category, required this.index});
+  const CategoryCard({
+    super.key,
+    required this.category,
+    required this.index,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = context.select<ThemeProvider, bool>((p) => p.isDark);
     final l10n = AppLocalizations.of(context)!;
-    final languageCode = Localizations
-        .localeOf(context)
-        .languageCode;
+    final bool imageOnLeft = index.isEven;
+    final languageCode = Localizations.localeOf(context).languageCode;
     final categoryName =
         (languageCode == 'ar' ? category.catNameAr : category.catNameEn) ?? "";
 
-    final TextDirection currentDirection = Directionality.of(context);
-    final bool isRtl = currentDirection == TextDirection.rtl;
-
-    final isEven = index.isEven;
-    final isDark = themeProvider.isDark;
-
-    final cardBgColor = isDark ? AppColors.white : AppColors.grey;
-    final titleColor = isDark ? AppColors.black : AppColors.white;
-
-    final buttonTextColor = isDark ? AppColors.white : AppColors.black;
-    final iconBgColor = isDark ? AppColors.black : AppColors.white;
-    final buttonBgColor = isDark
-        ? AppColors.black.withAlpha(124)
-        : AppColors.white.withAlpha(124);
-
-    final icon = isEven
-        ? Icons.arrow_forward_ios_outlined
-        : Icons.arrow_back_ios_new_outlined;
-
-    Widget imageWidget = ClipRRect(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(isRtl ? (isEven ? 24 : 0) : (isEven ? 24 : 0)),
-        bottomLeft: Radius.circular(
-            isRtl ? (isEven ? 24 : 0) : (isEven ? 24 : 0)),
-
-        topRight: Radius.circular(
-            isRtl ? (isEven ? 0 : 24) : (isEven ? 0 : 24)),
-        bottomRight: Radius.circular(
-            isRtl ? (isEven ? 0 : 24) : (isEven ? 0 : 24)),
-      ),
-      child: Image.asset(category.image ?? "", height: 200, fit: BoxFit.cover),
-    );
-
-    Widget buildButton() {
-      final rowChildren = isEven
-          ? [
-              const SizedBox(width: 8),
-              Text(
-                l10n.viewAll,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: context.fonts.titleLarge?.copyWith(
-                  color: buttonTextColor,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(35),
+        child: Container(
+          height: 180,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.white : AppColors.grey,
+            borderRadius: BorderRadius.circular(35),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(35),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: -10,
+                  bottom: -10,
+                  left: imageOnLeft ? -30 : null,
+                  right: !imageOnLeft ? -30 : null,
+                  child: _CategoryImage(imagePath: category.image),
                 ),
-              ),
-              CircleAvatar(
-                radius: 25,
-                backgroundColor: iconBgColor,
-                child: Icon(icon, color: buttonTextColor),
-              ),
-            ]
-          : [
-              CircleAvatar(
-                radius: 25,
-                backgroundColor: iconBgColor,
-                child: Icon(icon, color: buttonTextColor),
-              ),
-              Text(
-                l10n.viewAll,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: context.fonts.titleLarge?.copyWith(
-                  color: buttonTextColor,
-                ),
-              ),
-              const SizedBox(width: 8),
-            ];
-      return Container(
-        width: 167,
-        height: 54,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(84),
-          color: buttonBgColor,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: rowChildren,
-        ),
-      );
-    }
 
-    Widget infoWidget = Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text(
-            categoryName,
-            style: context.fonts.titleLarge?.copyWith(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: titleColor,
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Align(
+                    alignment: imageOnLeft
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.55,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: imageOnLeft
+                            ? CrossAxisAlignment.end
+                            : CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            categoryName,
+                            textAlign: imageOnLeft
+                                ? TextAlign.right
+                                : TextAlign.left,
+                            style: context.fonts.titleLarge?.copyWith(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: isDark ? AppColors.black : AppColors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          ViewAllButton(
+                            text: l10n.viewAll,
+                            isDark: isDark,
+                            imageOnLeft: imageOnLeft,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          buildButton(),
-        ],
+        ),
       ),
     );
+  }
+}
+
+class _CategoryImage extends StatelessWidget {
+  final String? imagePath;
+
+  const _CategoryImage({this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    if (imagePath == null || imagePath!.isEmpty) return const SizedBox();
+    return Image.asset(imagePath!, fit: BoxFit.contain);
+  }
+}
+
+class ViewAllButton extends StatelessWidget {
+  final String text;
+  final bool isDark;
+  final bool imageOnLeft;
+
+  const ViewAllButton({
+    super.key,
+    required this.text,
+    required this.isDark,
+    required this.imageOnLeft,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bgColor = (isDark ? AppColors.black : AppColors.white).withAlpha(124);
+    final contentColor = isDark ? AppColors.white : AppColors.black;
+    final iconBgColor = isDark ? AppColors.black : AppColors.white;
 
     return Container(
-      width: double.infinity,
-      height: 200,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        color: cardBgColor,
+        borderRadius: BorderRadius.circular(30),
+        color: bgColor,
       ),
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (imageOnLeft) ...[
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 12),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: contentColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              _buildIcon(iconBgColor, contentColor, Icons.chevron_right),
+            ],
+            if (!imageOnLeft) ...[
+              _buildIcon(iconBgColor, contentColor, Icons.chevron_left),
+              Padding(
+                padding: const EdgeInsets.only(left: 12, right: 16),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: contentColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
 
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: (isEven ^ isRtl)
-            ? [imageWidget, infoWidget]
-            : [infoWidget, imageWidget],
-      ),
+  Widget _buildIcon(Color bg, Color iconColor, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: bg),
+      child: Icon(icon, color: iconColor, size: 24),
     );
   }
 }
